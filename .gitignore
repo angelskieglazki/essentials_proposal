@@ -1,0 +1,37 @@
+*.study
+*.o
+*.cmd
+Module.symvers
+modules.order
+*.ko
+*.mod.c
+/.tmp_versions
+# C++ object files and executables
+*.o
+*.exe
+*.out
+
+# CMake build directory
+build/
+cmake-build-debug/
+
+# IDE specific files (e.g. Visual Studio, XCode, etc.)
+.vs/
+*.sln
+*.vcxproj
+*.xcodeproj
+.idea/
+.vscode/
+
+# Generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Editor backup files
+*~
+
+# Other build artifacts
+*.a
+*.so
