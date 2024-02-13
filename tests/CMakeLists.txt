@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
 include_directories(${CMAKE_BINARY_DIR})
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${GTEST_INCLUDE_DIRS})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(
         scope_guard_test
