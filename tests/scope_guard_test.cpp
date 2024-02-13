@@ -151,8 +151,3 @@ TEST(ScopeGuard, ThrowingCleanupAction_Test) {
   // EXPECT_THROW((void)MakeGuard(on_exit), std::runtime_error);
   EXPECT_EQ(scope_exit, 1);
 }
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

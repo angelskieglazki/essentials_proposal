@@ -8,12 +8,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 
 add_executable(
-        scope_guard_test
+        essentials_proposal_tests
+        main.cpp
         scope_guard_test.cpp
+        core_test.cpp
 )
 
 target_link_libraries(
-        scope_guard_test
+        essentials_proposal_tests
         PUBLIC
         ${GTEST_LIBRARIES}
 )
