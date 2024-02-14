@@ -23,6 +23,7 @@ class ScopeGuardBase {
  protected:
   explicit ScopeGuardBase(bool dismissed = false) noexcept
       : dismissed_(dismissed) {}
+  ~ScopeGuardBase() = default;
 
  protected:
   bool dismissed_;
