@@ -1,4 +1,5 @@
 #pragma once
+#include <type_traits>
 
 struct Moveonly {
   constexpr Moveonly() noexcept = default;
