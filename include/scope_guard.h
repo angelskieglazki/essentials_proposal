@@ -21,19 +21,53 @@ class ScopeGuardBase {
   void rehire() noexcept { dismissed_ = false; }
 
  protected:
-  explicit ScopeGuardBase(bool dismissed = false) noexcept
-      : dismissed_(dismissed) {}
-  ~ScopeGuardBase() = default;
+  ScopeGuardBase(bool dismissed = false) noexcept : dismissed_(dismissed) {}
+  static ScopeGuardBase makeEmptyScopeGuard() noexcept {
+    return ScopeGuardBase{};
+  }
 
  protected:
   bool dismissed_;
 };
 
+struct guard_dismissed {};
+
 template <typename F, bool InvokeNoExecept>
 class ScopeGuard : public ScopeGuardBase {
  public:
-  explicit ScopeGuard(F&& func) : f(std::move(func)) {}
-
+  explicit ScopeGuard(F& func) noexcept(std::is_nothrow_copy_constructible_v<F>)
+      : ScopeGuard(
+            std::as_const(func),
+            makeFailSafe(std::is_nothrow_copy_constructible<F>{}, &func)) {
+              std::cout << "test1" << std::endl;
+            }
+  explicit ScopeGuard(const F& func) noexcept(
+      std::is_nothrow_copy_constructible_v<F>)
+      : ScopeGuard(func, makeFailSafe(std::is_nothrow_copy_constructible<F>{},
+                                      &func)) {
+                                        std::cout << "test2" << std::endl;
+                                      }
+  explicit ScopeGuard(F&& func) noexcept(
+      std::is_nothrow_move_constructible_v<F>)
+      : ScopeGuard(
+            std::move_if_noexcept(func),
+            makeFailSafe(std::is_nothrow_move_constructible<F>{}, &func)) {
+              std::cout << "test3, " << std::is_nothrow_move_constructible_v<F> << std::endl;
+            }
+  explicit ScopeGuard(F&& func, guard_dismissed) noexcept(
+      std::is_nothrow_move_constructible_v<F>)
+      : ScopeGuardBase{true}, f(std::move(func)) {
+        std::cout << "test4" << std::endl;
+      }
+  ScopeGuard(ScopeGuard&& other) noexcept(
+      std::is_nothrow_move_constructible_v<F>)
+      : f(std::move_if_noexcept(other.f)) {
+    dismissed_ = std::exchange(other.dismissed_, true);
+    std::cout << "test5" << std::endl;
+  }
+  // ScopeGuard(const ScopeGuard&) = delete;
+  // ScopeGuard& operator=(const ScopeGuard&) = delete;
+  // ScopeGuard& operator=(ScopeGuard&&) = delete;
   ~ScopeGuard() noexcept(InvokeNoExecept) {
     if (!dismissed_) {
       if (InvokeNoExecept) {
@@ -48,6 +82,28 @@ class ScopeGuard : public ScopeGuardBase {
   }
 
  private:
+  void* operator new(size_t) = delete;
+  void* operator new[](size_t) = delete;
+  static ScopeGuardBase makeFailSafe(std::true_type, const void*) noexcept {
+    std::cout << "test6" << std::endl;
+    return makeEmptyScopeGuard();
+  }
+
+  template <typename Fn>
+  static auto makeFailSafe(std::false_type, Fn* fn) noexcept
+      -> ScopeGuard<decltype(std::ref(*fn)), InvokeNoExecept> {
+        std::cout << "test7" << std::endl;
+    return ScopeGuard<decltype(std::ref(*fn)), InvokeNoExecept>(std::ref(*fn));
+  }
+
+  template <typename Fn>
+  explicit ScopeGuard(Fn&& func, ScopeGuardBase&& failSafe)
+      : ScopeGuardBase{}, f(std::forward<Fn>(func)) {
+        std::cout << "test8" << std::endl;
+    failSafe.dismiss();
+  }
+
+ private:
   F f;
 };
 
@@ -55,9 +111,16 @@ template <typename Fun, bool InvokeNoExecept>
 using ScopeGuardDecay = ScopeGuard<typename std::decay_t<Fun>, InvokeNoExecept>;
 
 template <typename Fun>
-[[nodiscard]] auto MakeGuard(Fun&& func) noexcept(
+[[nodiscard]] auto makeGuard(Fun&& func) noexcept(
     noexcept(ScopeGuardDecay<Fun, true>(std::forward<Fun>(func)))) {
   return ScopeGuardDecay<Fun, true>(std::forward<Fun>(func));
+}
+
+template <typename Fun>
+[[nodiscard]] ScopeGuardDecay<Fun, true> makeDismissedGuard(Fun&& func) noexcept(
+    noexcept(ScopeGuardDecay<Fun, true>(std::forward<Fun>(func),
+                                        guard_dismissed{}))) {
+  return ScopeGuardDecay<Fun, true>(std::forward<Fun>(func), guard_dismissed{});
 }
 
 class UncaughtExceptionDetector {
@@ -76,13 +139,19 @@ class ScopeGuardNewException {
  public:
   explicit ScopeGuardNewException(F&& func) : guard_(std::move(func)) {}
   explicit ScopeGuardNewException(const F& func) : guard_(func) {}
-  ScopeGuardNewException(ScopeGuardNewException&& other)  = default;
+  ScopeGuardNewException(ScopeGuardNewException&& other) = default;
 
   ~ScopeGuardNewException() noexcept(ExecuteOnException) {
     if (ExecuteOnException != detector_.haveNewException()) {
       guard_.dismiss();
     }
   }
+
+ private:
+  void* operator new(size_t) = delete;
+  void* operator new[](size_t) = delete;
+  void operator delete(void*) = delete;
+  void operator delete[](void*) = delete;
 
  private:
   ScopeGuard<F, ExecuteOnException> guard_;

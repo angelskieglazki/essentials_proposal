@@ -12,6 +12,7 @@ add_executable(
         main.cpp
         scope_guard_test.cpp
         core_test.cpp
+        trats_test.cpp
 )
 
 target_link_libraries(

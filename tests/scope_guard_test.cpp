@@ -13,7 +13,7 @@ void testResultExit(Result result) {
   bool res = false;
 
   try {
-    auto guard = MakeGuard([&] { res = true; });
+    auto guard = makeGuard([&] { res = true; });
     (void)guard;
     // SCOPE_EXIT { res = true; }; - этот макрос делает тоже самое что и код
     // выше.
@@ -136,6 +136,7 @@ TEST(ScopeGuard, ThrowingCleanupAction_Test) {
   struct ThrowingCleanupAction {
     explicit ThrowingCleanupAction(int& x) : x_(x) {}
     ThrowingCleanupAction(const ThrowingCleanupAction& other) : x_(other.x_) {
+      std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
       throw std::runtime_error("test");
     }
 
@@ -147,7 +148,8 @@ TEST(ScopeGuard, ThrowingCleanupAction_Test) {
 
   int scope_exit = 0;
   ThrowingCleanupAction on_exit(scope_exit);
-  on_exit();
-  // EXPECT_THROW((void)MakeGuard(on_exit), std::runtime_error);
+  EXPECT_THROW((void)makeGuard(on_exit), std::runtime_error);
   EXPECT_EQ(scope_exit, 1);
+  EXPECT_THROW((void)makeGuard(ThrowingCleanupAction(scope_exit)), std::runtime_error);
+  EXPECT_EQ(scope_exit, 2);
 }
