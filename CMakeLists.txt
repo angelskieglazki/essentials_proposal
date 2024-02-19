@@ -7,7 +7,7 @@ find_package(GTest REQUIRED)
 
 message(${CMAKE_CXX_COMPILER})
 set(CMAKE_CXX_STANDARD 20)
-
+MESSAGE(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 include(cmake/warn-everything.cmake)
 
 warn_everything(WARN_EVERYTHING_CXX WARN_EVERYTHING_C)

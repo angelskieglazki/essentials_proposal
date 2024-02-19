@@ -136,7 +136,6 @@ TEST(ScopeGuard, ThrowingCleanupAction_Test) {
   struct ThrowingCleanupAction {
     explicit ThrowingCleanupAction(int& x) : x_(x) {}
     ThrowingCleanupAction(const ThrowingCleanupAction& other) : x_(other.x_) {
-      std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
       throw std::runtime_error("test");
     }
 
