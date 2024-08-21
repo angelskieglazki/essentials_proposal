@@ -41,11 +41,24 @@ TEST(ScopeGuard, TryCatchResultExit) {
 TEST(ScopeGuard, ScopeExit_test) {
   int x = 0;
   {
-    SCOPE_EXIT { ++x; };
+    SCOPE_EXIT { x = x + 1; };
     EXPECT_EQ(x, 0);
   }
   EXPECT_EQ(x, 1);
 }
+
+TEST(ScopeGuard, ScopeExit2_test) {
+  int x = 0;
+  try {
+    SCOPE_EXIT { x = x + 666; };
+    throw std::runtime_error("test");
+    EXPECT_EQ(x, 0);
+  } catch (...) {
+    EXPECT_EQ(x, 666);
+  }
+  EXPECT_EQ(x, 666);
+}
+
 
 struct Foo {
   Foo() = default;
