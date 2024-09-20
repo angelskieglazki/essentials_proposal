@@ -1,0 +1,40 @@
+userver:
+    fixedarray
+    TrivialBiMap
+    log
+cage:
+    sheduler
+    arena
+    ...
+realm:
+    profiler
+folly:
+    ---
+    fiber: https://agraphicsguynotes.com/posts/fiber_in_cpp_understanding_the_basics/#difference-between-fiber-and-c-coroutine
+game-servers:
+    ---
+game-engines:
+    ---
+GEMS:
+gems1
+1) generic handle based resource manager, 66, 
+https://github.com/joeld42/ld48jovoc/blob/46ba4d755698f0e578247b84598046b6d16d48c0/luddite/luddite/handle.h#L86
+https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/06Bilas/handle.h
+2) resource manager, 78,
+https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/07Boer/ResourceManager.cpp
+3) frame based memory allocator, 90
+https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/09Ranck/EXAMPLE.CPP
+4) buffer pool, 102
+https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/11Kirmse/bufferpool.h
+5) asser with break, 107
+https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/12Rabin/assert5.cpp
+6)
+
+llvm:
+    https://llvm.org/doxygen/UniqueVector_8h_source.html
+boost:
+    https://blog.devgenius.io/c-101-introduction-to-boost-intrusive-ptr-17656ff627c9
+
+threaadpools and taskschedulers
+
+ламберярд и o3de
