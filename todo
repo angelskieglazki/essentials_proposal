@@ -28,7 +28,52 @@ https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/09
 https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/11Kirmse/bufferpool.h
 5) asser with break, 107
 https://github.com/jb2020-super/Game-Programming-Gems-1/blob/main/Programming/12Rabin/assert5.cpp
-6)
+6)real0time in game profiling, 127
+7) predictable random number generator, 134
+8) intepolation methods, 137
+9) designing a general robust ai engine, 221
+10) fsm class, 231
+11) game trees, 245
+12) basic a*, 248
+13) a* optimisation, 258
+14) a* speed optimisation, 266
+15) navmesh, 283
+16) group behavior, 299
+17) fuzzy logic, 314
+18) neural net, 324
+19) real time relistic terrain generation, 476 ... 
+
+gems2
+1) dynamic type informations, 37
+2) debug memory leak, 64
+3) ai, 241
+sphere three optimization
+
+gems3
+1)scheduling game events, 7
+2) custom stl allocator, 55
+3) save me, 61
+4) autolist, 67
+5) policy based logger,132
+6) journaling services, 139
+7) AI, 225
+8) network, 473
+
+gems4
+1) timers, clock 50
+2) memory fragmentation, 64
+3) RTTI serializing, 122
+freelist
+
+gems5
+1) component based system, 67
+2) RTTI, 81
+3) freelist, 171
+4) remote debug logger, 188
+5) ABTree. 201
+
+gems6
+1)
 
 llvm:
     https://llvm.org/doxygen/UniqueVector_8h_source.html
