@@ -2,6 +2,7 @@ userver:
     fixedarray
     TrivialBiMap
     log
+    замена stringstream
 cage:
     sheduler
     arena
@@ -16,6 +17,7 @@ game-servers:
 game-engines:
     ---
 GEMS:
+https://alex-simon.blogspot.com/2010/04/game-programming-gems-list-of-contents.html
 gems1
 1) generic handle based resource manager, 66, 
 https://github.com/joeld42/ld48jovoc/blob/46ba4d755698f0e578247b84598046b6d16d48c0/luddite/luddite/handle.h#L86
